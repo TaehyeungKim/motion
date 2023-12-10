@@ -1,4 +1,4 @@
-import { ArticleComponent, BaseComponent } from "../base.js";
+import { ArticleComponent, BaseComponent, ArticleListConstructor } from "../base.js";
 
 
 
@@ -20,14 +20,13 @@ export class ImageArticleComponent extends ArticleComponent {
     private _image: ImageComponent;
     private _caption: CaptionComponent
 
-    constructor(url: string, caption: string) {
-        super();
+    constructor(url: string, caption: string, constructor: ArticleListConstructor) {
+        super(constructor);
         this._image = new ImageComponent(url);
         this._caption = new CaptionComponent(caption);
         
         this._image.attachTo(this._component);
         this._caption.attachTo(this._component, "beforeend")
-        
     }
 
 }

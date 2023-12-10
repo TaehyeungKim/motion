@@ -12,8 +12,8 @@ class CaptionComponent extends BaseComponent {
     }
 }
 export class ImageArticleComponent extends ArticleComponent {
-    constructor(url, caption) {
-        super();
+    constructor(url, caption, constructor) {
+        super(constructor);
         this._image = new ImageComponent(url);
         this._caption = new CaptionComponent(caption);
         this._image.attachTo(this._component);

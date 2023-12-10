@@ -1,20 +1,32 @@
 import { PageComponent } from "./components/page.js";
-import { ImageArticleComponent } from "./components/items/image.js";
-import { NoteArticleComponent } from "./components/items/note.js";
-import { VideoArticleComponent } from "./components/items/video.js";
-import { TodoArticleComponent } from "./components/items/todo.js";
+import { ImageDialog, VideoDialog } from "./components/dialog/media-dialog.js";
+import { TodoDialog, TaskDialog } from "./components/dialog/text-dialog.js";
 class App {
     constructor(root) {
         this.page = new PageComponent();
         this.page.attachTo(root);
-        const image = new ImageArticleComponent("https://picsum.photos/200/300", "good image");
-        image.attachTo(this.page.component);
-        const note = new NoteArticleComponent("New Note", "sfdsfsfs");
-        note.attachTo(this.page.component);
-        const video = new VideoArticleComponent("https://www.youtube.com/embed/IfMUaBDO3UE", "LE SSERAFIM");
-        video.attachTo(this.page.component);
-        const todo = new TodoArticleComponent("New Todo", "todo1", "todo2", "todo3");
-        todo.attachTo(this.page.component);
+        const newButtons = document.querySelectorAll('.new-button');
+        newButtons.forEach(button => button.addEventListener('click', (e) => {
+            const target = e.currentTarget;
+            const id = target.id;
+            let dialog;
+            switch (id) {
+                case "image":
+                    dialog = new ImageDialog();
+                    break;
+                case "task":
+                    dialog = new TaskDialog();
+                    break;
+                case "todo":
+                    dialog = new TodoDialog();
+                    break;
+                case "video":
+                    dialog = new VideoDialog();
+                    break;
+            }
+            dialog.submitEvent = () => this.page.addArticle(dialog);
+            dialog.attachTo(document.body);
+        }));
     }
 }
 const app = new App(document.getElementById('root'));

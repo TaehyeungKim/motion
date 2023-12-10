@@ -2,7 +2,13 @@ import { ArticleComponent, BaseComponent } from "../base.js";
 class VideoFrameComponent extends BaseComponent {
     constructor(src) {
         super('iframe');
-        this._component.src = src;
+        this._component.src = this.makeEmbedUrl(src);
+    }
+    makeEmbedUrl(url) {
+        const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:(?:youtube.com\/(?:(?:watch\?v=)|(?:embed\/))([\w-]{11}))|(?:youtu.be\/([\w-]{11})))/;
+        const template = "https://www.youtube.com/embed/";
+        const matched = url.match(regExp);
+        return matched ? template + matched[1] || template + matched[2] : url;
     }
 }
 class VideoHeaderComponent extends BaseComponent {
@@ -14,8 +20,8 @@ class VideoHeaderComponent extends BaseComponent {
     }
 }
 export class VideoArticleComponent extends ArticleComponent {
-    constructor(src, title) {
-        super();
+    constructor(src, title, constructor) {
+        super(constructor);
         this._header = new VideoHeaderComponent(title);
         this._frame = new VideoFrameComponent(src);
         this._header.attachTo(this._component);

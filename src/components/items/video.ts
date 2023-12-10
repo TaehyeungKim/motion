@@ -1,9 +1,18 @@
-import { ArticleComponent, BaseComponent } from "../base.js";
+import { ArticleComponent, BaseComponent, ArticleListConstructor } from "../base.js";
 
 class VideoFrameComponent extends BaseComponent<'iframe'> {
     constructor(src: string) {
         super('iframe');
-        this._component.src = src;
+        this._component.src = this.makeEmbedUrl(src);
+    }
+
+    private makeEmbedUrl(url: string): string {
+        const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:(?:youtube.com\/(?:(?:watch\?v=)|(?:embed\/))([\w-]{11}))|(?:youtu.be\/([\w-]{11})))/
+        
+        const template = "https://www.youtube.com/embed/"
+        
+        const matched = url.match(regExp);
+        return matched ? template + matched[1] || template + matched[2] : url   
     }
 }
 
@@ -21,8 +30,8 @@ export class VideoArticleComponent extends ArticleComponent {
     private _header: VideoHeaderComponent;
     private _frame: VideoFrameComponent;
 
-    constructor(src: string, title: string) {
-        super();
+    constructor(src: string, title: string, constructor: ArticleListConstructor) {
+        super(constructor);
         this._header = new VideoHeaderComponent(title);
         this._frame = new VideoFrameComponent(src)
 

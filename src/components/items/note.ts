@@ -1,4 +1,4 @@
-import { BaseComponent, ArticleComponent } from "../base.js";
+import { BaseComponent, ArticleComponent, ArticleListConstructor } from "../base.js";
 
 
 
@@ -22,8 +22,8 @@ export class NoteArticleComponent extends ArticleComponent {
     private _header: NoteHeaderComponent;
     private _content: NoteContentComponent;
     
-    constructor(title: string, content: string) {
-        super();
+    constructor(title: string, content: string, constructor: ArticleListConstructor) {
+        super(constructor);
         this._header = new NoteHeaderComponent(title);
         this._content = new NoteContentComponent(content);
 

@@ -1,4 +1,4 @@
-import { ArticleComponent, BaseComponent } from "../base.js";
+import { ArticleComponent, BaseComponent, ArticleListConstructor } from "../base.js";
 
 class TodoHeaderComponent extends BaseComponent<'header'> {
     constructor(title: string) {
@@ -32,8 +32,8 @@ export class TodoArticleComponent extends ArticleComponent {
     private _header: TodoHeaderComponent;
     private _content: TodoContentComponent;
 
-    constructor(title: string, ...todos: string[]) {
-        super();
+    constructor(title: string, constructor: ArticleListConstructor, ...todos: string[]) {
+        super(constructor);
         this._header = new TodoHeaderComponent(title);
         this._content = new TodoContentComponent(...todos);
 
