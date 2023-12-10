@@ -1,4 +1,4 @@
-import { ArticleComponent, BaseComponent } from "./base.js";
+import { ArticleComponent, BaseComponent } from "../base.js";
 
 
 
@@ -16,12 +16,12 @@ class CaptionComponent extends BaseComponent<'p'> {
     }
 }
 
-export class ImageArticleComponent extends ArticleComponent<'section'> {
+export class ImageArticleComponent extends ArticleComponent {
     private _image: ImageComponent;
     private _caption: CaptionComponent
 
     constructor(url: string, caption: string) {
-        super('section')
+        super();
         this._image = new ImageComponent(url);
         this._caption = new CaptionComponent(caption);
         

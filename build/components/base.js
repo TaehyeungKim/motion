@@ -10,6 +10,9 @@ export class BaseComponent {
     }
 }
 export class ArticleComponent extends BaseComponent {
+    constructor() {
+        super('section');
+    }
     attachTo(parent, position = "afterbegin") {
         const li = document.createElement('li');
         li.appendChild(this._component);

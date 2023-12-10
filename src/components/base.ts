@@ -18,7 +18,12 @@ export class BaseComponent<T extends keyof HTMLElementTagNameMap> implements Bas
     }
 }
 
-export class ArticleComponent<T extends keyof HTMLElementTagNameMap> extends BaseComponent<T> {
+export class ArticleComponent extends BaseComponent<'section'> {
+
+    constructor() {
+        super('section')
+    }
+
     attachTo(parent: HTMLElement, position: InsertPosition = "afterbegin") {
         const li = document.createElement('li');
         li.appendChild(this._component);
