@@ -1,0 +1,21 @@
+.article {
+    display: flex;
+    box-shadow: 2px 2px 6px var(--shadow-color);
+    background: var(--bg-accent-color);
+    background: var(--component-bg-gradient);
+    margin-bottom: 1em;
+    cursor: pointer;
+    user-select: none;
+}
+
+.article:hover {
+    opacity: 0.7;
+}
+
+.mute * {
+    pointer-events: none;
+}
+
+.article:last-child {
+    margin-bottom: 0;
+}

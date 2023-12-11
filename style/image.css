@@ -1,0 +1,10 @@
+.image-caption {
+    padding: 0.3em;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.image-image {
+    display: block;
+    margin: 0 auto 0;    
+}

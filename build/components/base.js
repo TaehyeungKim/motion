@@ -11,54 +11,97 @@ export class BaseComponent {
     addChild(child, position = "beforeend") {
         this._component.insertAdjacentElement(position, child.component);
     }
+    remove() {
+        this._component.remove();
+        console.log(this);
+        return this;
+    }
     setStyle(style) {
         this._component.setAttribute('style', style);
     }
+    addListener(event, l) {
+        this._component.addEventListener(event, l);
+    }
+    setClass(...c) {
+        this._component.classList.add(...c);
+    }
+    removeClass(c) {
+        this._component.classList.remove(c);
+    }
+    switchPosition(target, position) {
+        target.component.insertAdjacentElement(position, this._component);
+    }
 }
-export class ArticleListComponent extends BaseComponent {
+class ArticleDeleteButtonComponent extends BaseComponent {
     constructor() {
-        super('li');
-        this._articleListStyle = `
-        display: flex;
-    `;
-        this._buttonContainerStyle = `
-        display: flex;
-        align-items: center;
-        padding: 1.2em;
-    `;
+        super('button');
         this._buttonStyle = `
         font-size: 1.3em;
         cursor: pointer;
         
     `;
-        this.setStyle(this._articleListStyle);
-        const del = this.createDeleteButton();
-        this.component.appendChild(del);
-    }
-    createDeleteButton() {
-        const area = document.createElement('div');
-        area.setAttribute('style', this._buttonContainerStyle);
-        const button = document.createElement('button');
-        button.setAttribute('style', this._buttonStyle);
-        const deleteListener = () => () => this._component.remove();
-        button.addEventListener('click', deleteListener());
-        button.textContent = 'X';
-        area.appendChild(button);
-        return area;
+        this._component.textContent = 'X';
+        this.setStyle(this._buttonStyle);
     }
 }
 export class ArticleComponent extends BaseComponent {
-    constructor(list) {
+    constructor() {
         super('section');
-        this.list = list;
         this._articleStyle = `
-        flex-grow: 1;
+        width: 100%;
     `;
         this.setStyle(this._articleStyle);
     }
-    attachTo(parent, position = "afterbegin") {
-        const li = new this.list();
-        li.addChild(this, "afterbegin");
-        li.attachTo(parent, position);
+}
+export class ArticleListComponent extends BaseComponent {
+    constructor(articleConstructor, ...data) {
+        super('div');
+        this.articleConstructor = articleConstructor;
+        this._component.setAttribute('draggable', 'true');
+        this.setClass(ArticleListComponent._articleListClass);
+        const article = new this.articleConstructor(...data);
+        this.addChild(article);
+        const del = this.createDeleteButton();
+        this.addChild(del);
+        this.addListener('dragstart', (e) => {
+            this.notifyObserver('start');
+            console.log('start', this);
+        });
+        this.addListener('dragend', (e) => {
+            this.notifyObserver('end');
+        });
+        this.addListener('dragenter', (e) => {
+            e.stopPropagation();
+            this.notifyObserver('enter');
+            console.log('enter', this);
+        });
+        this.addListener('dragleave', (e) => {
+            this.notifyObserver('leave');
+        });
+    }
+    setDragListener(l) {
+        this.dragListener = l;
+    }
+    notifyObserver(state) {
+        this.dragListener && this.dragListener(state, this);
+    }
+    createDeleteButton() {
+        const container = new BaseComponent('div');
+        container.setStyle(ArticleListComponent._buttonContainerStyle);
+        const button = new ArticleDeleteButtonComponent();
+        button.addListener('click', () => this.remove());
+        container.addChild(button);
+        return container;
     }
 }
+ArticleListComponent._articleListClass = 'article';
+ArticleListComponent._buttonContainerStyle = `
+        poisition: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        padding: 1.2em;
+        
+    `;

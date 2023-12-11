@@ -25,8 +25,8 @@ class TodoContentComponent extends BaseComponent {
     }
 }
 export class TodoArticleComponent extends ArticleComponent {
-    constructor(title, constructor, ...todos) {
-        super(constructor);
+    constructor(title, ...todos) {
+        super();
         this._header = new TodoHeaderComponent(title);
         this._content = new TodoContentComponent(...todos);
         this._header.attachTo(this._component);

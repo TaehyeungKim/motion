@@ -20,8 +20,8 @@ class VideoHeaderComponent extends BaseComponent {
     }
 }
 export class VideoArticleComponent extends ArticleComponent {
-    constructor(src, title, constructor) {
-        super(constructor);
+    constructor(src, title) {
+        super();
         this._header = new VideoHeaderComponent(title);
         this._frame = new VideoFrameComponent(src);
         this._header.attachTo(this._component);

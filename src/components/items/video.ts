@@ -30,8 +30,8 @@ export class VideoArticleComponent extends ArticleComponent {
     private _header: VideoHeaderComponent;
     private _frame: VideoFrameComponent;
 
-    constructor(src: string, title: string, constructor: ArticleListConstructor) {
-        super(constructor);
+    constructor(src: string, title: string) {
+        super();
         this._header = new VideoHeaderComponent(title);
         this._frame = new VideoFrameComponent(src)
 

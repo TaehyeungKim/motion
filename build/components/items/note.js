@@ -14,8 +14,8 @@ class NoteContentComponent extends BaseComponent {
     }
 }
 export class NoteArticleComponent extends ArticleComponent {
-    constructor(title, content, constructor) {
-        super(constructor);
+    constructor(title, content) {
+        super();
         this._header = new NoteHeaderComponent(title);
         this._content = new NoteContentComponent(content);
         this._header.attachTo(this._component);
