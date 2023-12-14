@@ -1,11 +1,11 @@
-import { DialogComponent, BasicDialogContentBox } from "./dialog.js";
-export class ImageDialog extends DialogComponent {
+import { BasicDialogComponent } from "./dialog.js";
+export class ImageDialog extends BasicDialogComponent {
     constructor() {
-        super(BasicDialogContentBox, 'image', 'title', 'url');
+        super('image', 'title', 'url');
     }
 }
-export class VideoDialog extends DialogComponent {
+export class VideoDialog extends BasicDialogComponent {
     constructor() {
-        super(BasicDialogContentBox, 'video', 'title', 'url');
+        super('video', 'title', 'url');
     }
 }

@@ -2,8 +2,8 @@ export interface Component {
     attachTo(parent: HTMLElement, position?: InsertPosition): void
     setStyle(style: string): void;
     setClass(...c: string[]): void;
-    removeClass(c: string): void;
-    addListener(event: keyof DocumentEventMap, l: (e?: Event)=>void): void;
+    removeClass(...c: string[]): void;
+    addListener(event: keyof HTMLElementEventMap, l: (ev: Event)=>void): void;
     remove(): Component
     switchPosition(target: Component, position: InsertPosition): void;
     get component(): HTMLElement;
@@ -49,8 +49,8 @@ export class BaseComponent<T extends keyof HTMLElementTagNameMap> implements Com
     setClass(...c: string[]): void {
         this._component.classList.add(...c);
     }
-    removeClass(c: string): void {
-        this._component.classList.remove(c);
+    removeClass(...c: string[]): void {
+        this._component.classList.remove(...c);
     }
 
     switchPosition(target: Component, position: InsertPosition): void {

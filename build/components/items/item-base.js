@@ -25,7 +25,7 @@ export class ArticleListComponent extends BaseComponent {
         super('div');
         this.articleConstructor = articleConstructor;
         this._component.setAttribute('draggable', 'true');
-        this.setClass(ArticleListComponent._articleListClass);
+        this.setClass(...ArticleListComponent._articleListClassList);
         const article = new this.articleConstructor(...data);
         this.addChild(article);
         const del = this.createDeleteButton();
@@ -59,7 +59,7 @@ export class ArticleListComponent extends BaseComponent {
         return container;
     }
 }
-ArticleListComponent._articleListClass = 'article';
+ArticleListComponent._articleListClassList = ['shadow-sm', 'p-3', 'mb-5', 'bg-body-tertiary', 'rounded', 'shadow-hover', 'd-flex'];
 ArticleListComponent._buttonContainerStyle = `
         poisition: absolute;
         top: 0;

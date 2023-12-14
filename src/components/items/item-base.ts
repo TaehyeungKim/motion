@@ -55,7 +55,7 @@ export class ArticleListComponent extends BaseComponent<'div'> implements Articl
 
     private dragListener?: DragListener;
 
-    private static _articleListClass: string = 'article'
+    private static _articleListClassList: string[] = ['shadow-sm','p-3' ,'mb-5' ,'bg-body-tertiary' ,'rounded', 'shadow-hover', 'd-flex']
 
     private static _buttonContainerStyle: string = `
         poisition: absolute;
@@ -71,7 +71,7 @@ export class ArticleListComponent extends BaseComponent<'div'> implements Articl
     constructor(private articleConstructor: ArticleComponentConstructor, ...data: string[]) {
         super('div');
         this._component.setAttribute('draggable', 'true')
-        this.setClass(ArticleListComponent._articleListClass)
+        this.setClass(...ArticleListComponent._articleListClassList)
 
         const article = new this.articleConstructor(...data)
         this.addChild(article)
@@ -100,6 +100,8 @@ export class ArticleListComponent extends BaseComponent<'div'> implements Articl
             this.notifyObserver('leave')
             
         })
+
+
 
     }
 

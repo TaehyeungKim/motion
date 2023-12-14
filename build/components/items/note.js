@@ -4,6 +4,7 @@ class NoteHeaderComponent extends BaseComponent {
     constructor(title) {
         super('header');
         const h = document.createElement('h2');
+        h.classList.add("h3");
         h.textContent = title;
         this._component.appendChild(h);
     }

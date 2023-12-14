@@ -24,8 +24,8 @@ export class BaseComponent {
     setClass(...c) {
         this._component.classList.add(...c);
     }
-    removeClass(c) {
-        this._component.classList.remove(c);
+    removeClass(...c) {
+        this._component.classList.remove(...c);
     }
     switchPosition(target, position) {
         target.component.insertAdjacentElement(position, this._component);

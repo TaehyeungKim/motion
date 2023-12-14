@@ -4,9 +4,13 @@ import {ArticleComponent} from './item-base.js'
 
 
 class NoteHeaderComponent extends BaseComponent<'header'> {
+
+
+
     constructor(title: string) {
         super('header');
         const h = document.createElement('h2');
+        h.classList.add("h3")
         h.textContent = title;
         this._component.appendChild(h);
     }

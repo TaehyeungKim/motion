@@ -1,13 +1,13 @@
-import { DialogComponent, BasicDialogContentBox } from "./dialog.js";
+import { BasicDialogComponent } from "./dialog.js";
 
-export class TodoDialog extends DialogComponent<"todo"> {
+export class TodoDialog extends BasicDialogComponent<"todo"> {
     constructor() {
-        super(BasicDialogContentBox, 'todo', 'title', 'todo1', 'todo2', 'todo3')
+        super('todo', 'title', 'todo1', 'todo2', 'todo3')
     }
 }
 
-export class TaskDialog extends DialogComponent<"task"> {
+export class TaskDialog extends BasicDialogComponent<"task"> {
     constructor() {
-        super(BasicDialogContentBox, 'task', 'title', 'note')
+        super('task', 'title', 'note')
     }
 }

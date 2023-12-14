@@ -7,26 +7,10 @@ export class DialogComponent extends BaseComponent {
         return this._data;
     }
     set data(data) { this._data = data; }
-    constructor(contentBox, type, ...label) {
+    constructor(type) {
         super('dialog');
-        this.contentBox = contentBox;
         this.type = type;
         this._data = {};
-        this._backgroundStyle = `
-        position: fixed;
-        width: 100vw;
-        height: 100vh;
-        left: 0;
-        top: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: rgba(255,255,255,0.3);
-        z-index: 10;
-    `;
-        this.setStyle(this._backgroundStyle);
-        const box = new this.contentBox(this, type, ...label);
-        this.addChild(box);
     }
     closeDialog() {
         return () => this._component.remove();
@@ -124,11 +108,13 @@ class DialogContentInput extends BaseComponent {
         return input;
     }
 }
-export class BasicDialogContentBox extends BaseComponent {
-    constructor(component, type, ...label) {
-        super('div');
-        this.addChild(new DialogContentHeader(type, component));
-        this.addChild(new DialogContentInput(type, component, ...label));
-        this.addChild(new DialogContentFooter(component));
+export class BasicDialogComponent extends DialogComponent {
+    constructor(type, ...label) {
+        super(type);
+        this.setClass(...BasicDialogComponent._bdcClassList);
+        this.addChild(new DialogContentHeader(type, this));
+        this.addChild(new DialogContentInput(type, this, ...label));
+        this.addChild(new DialogContentFooter(this));
     }
 }
+BasicDialogComponent._bdcClassList = ["modal-dialog", "modal-dialog-centered"];

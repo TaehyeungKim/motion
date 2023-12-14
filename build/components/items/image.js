@@ -8,20 +8,20 @@ class ImageComponent extends BaseComponent {
     }
 }
 ImageComponent._imageClass = 'image-image';
-class CaptionComponent extends BaseComponent {
-    constructor(caption) {
-        super('p');
-        this._component.textContent = caption;
-        this.setClass(CaptionComponent._captionClass);
+class ImageHeaderComponent extends BaseComponent {
+    constructor(title) {
+        super('header');
+        const h = document.createElement('h2');
+        h.textContent = title;
+        this._component.appendChild(h);
     }
 }
-CaptionComponent._captionClass = 'image-caption';
 export class ImageArticleComponent extends ArticleComponent {
-    constructor(url, caption) {
+    constructor(url, title) {
         super();
         this._image = new ImageComponent(url);
-        this._caption = new CaptionComponent(caption);
+        this._caption = new ImageHeaderComponent(title);
         this._image.attachTo(this._component);
-        this._caption.attachTo(this._component, "beforeend");
+        this._caption.attachTo(this._component, "afterbegin");
     }
 }

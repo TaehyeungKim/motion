@@ -29,7 +29,10 @@ class App {
                     break;
             }
             dialog.submitEvent = () => this.page.addArticle(dialog.data);
-            dialog.attachTo(document.body);
+            const backdrop = document.getElementById('staticBackdrop');
+            dialog.attachTo(backdrop);
+            backdrop.setAttribute('style', "display: block");
+            backdrop.classList.add('show');
         }));
     }
 }

@@ -14,26 +14,26 @@ class ImageComponent extends BaseComponent<'img'>{
     }
 }
 
-class CaptionComponent extends BaseComponent<'p'> {
-    private static _captionClass: string = 'image-caption'
-    constructor(caption: string) {
-        super('p');
-        this._component.textContent = caption;
-        this.setClass(CaptionComponent._captionClass)
+class ImageHeaderComponent extends BaseComponent<'header'> {
+    constructor(title: string) {
+        super('header');
+        const h = document.createElement('h2');
+        h.textContent = title;
+        this._component.appendChild(h);
     }
 }
 
 export class ImageArticleComponent extends ArticleComponent {
     private _image: ImageComponent;
-    private _caption: CaptionComponent
+    private _caption: ImageHeaderComponent
  
-    constructor(url: string, caption: string) {
+    constructor(url: string, title: string) {
         super()
         this._image = new ImageComponent(url);
-        this._caption = new CaptionComponent(caption);
+        this._caption = new ImageHeaderComponent(title);
         
         this._image.attachTo(this._component);
-        this._caption.attachTo(this._component, "beforeend")
+        this._caption.attachTo(this._component, "afterbegin")
     }
 
 }

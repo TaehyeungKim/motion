@@ -1,4 +1,4 @@
-:root {
+/* :root {
     --bg-main-color: #00000080;
     --bg-accent-color: #2d2d2d;
     --accent-color: #f64435;
@@ -11,7 +11,7 @@
     --smokywhite: #dddbd8;
     --black: #000000;
     --translucent-black: #00000099;
-  }
+  } */
 
 
 body {
@@ -52,14 +52,14 @@ h2 {
     max-width: 700px;
     position: relative;
     margin: 0 auto 0;
-    background-color: rgba(255,255,255,0.3);
     display: flex;
     flex-direction: column;
     
 }
 
 .main .header {
-    background-color: black;
+    background-color: var(--bs-primary-bg-subtle);
+    border-color: var(--bs-primary-border-subtle);
 }
 
 
@@ -75,14 +75,28 @@ h2 {
 .main .header .title .title-motion {
     font-size: 2em;
     font-weight: bold;
-    color: red;
+    /* color: red; */
+    color: var(	--bs-primary)
 }
 
-.main .header .nav {
-    padding: 1rem;
+
+.myNav {
+    padding: 1rem !important
 }
 
-.main .header .nav ul {
+.new-button {
+    background-color: var(--bs-info-bg-subtle) !important;
+    border-color: var(	--bs-info-border-subtle) !important;
+    color: var(	--bs-info-text-emphasis) !important;
+}
+
+.new-button:hover {
+    background-color: var(--bs-info) !important;
+    border-color: var(--bs-primary-border-subtle) !important;
+    color: white !important;
+}
+
+/* .main .header .nav ul {
     display: flex;
     justify-content: center;
 }
@@ -90,9 +104,9 @@ h2 {
 .main .header .nav ul li {
     box-sizing: border-box;
     
-}
+} */
 
-.main .header .nav ul li button {
+/* .main .header .nav ul li button {
     background-color: deeppink;
     padding: 0.6em 1em;
     border: 1px solid white;
@@ -101,7 +115,7 @@ h2 {
     box-sizing: border-box;
     color: white;
     font-weight: bold;
-}
+} */
 
 
 
@@ -111,10 +125,6 @@ h2 {
     padding: 0.7em;
 }
 
-.main .footer {
-    background-color: black;;
-    
-}
 
 .main .footer span {
     text-align: center;

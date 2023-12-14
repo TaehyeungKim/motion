@@ -37,26 +37,11 @@ export class DialogComponent<T extends ArticleType> extends BaseComponent<'dialo
     }
     set data(data: DialogData<ArticleType>) {this._data = data}
 
-    private _backgroundStyle: string = `
-        position: fixed;
-        width: 100vw;
-        height: 100vh;
-        left: 0;
-        top: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: rgba(255,255,255,0.3);
-        z-index: 10;
-    `
 
 
-    constructor(private contentBox: DialogContentBoxConstructor<T>, public type: ArticleType, ...label: (keyof DialogInputData<T>)[]) {
+    constructor(public type: ArticleType) {
         super('dialog');
-        this.setStyle(this._backgroundStyle);
-        const box = new this.contentBox(this, type, ...label);
-        this.addChild(box)
-
+        // this.setStyle(this._backgroundStyle);
     }
 
     closeDialog() {
@@ -177,20 +162,24 @@ class DialogContentInput<T extends ArticleType> extends BaseComponent<'section'>
     }
 }
 
-interface DialogContentBox extends ComposableComponent{
+// interface DialogContentBox extends ComposableComponent{
 
-}
+// }
 
-type DialogContentBoxConstructor<T extends ArticleType> = {
-    new(component: DialogComponent<T>, type: ArticleType, ...label: (keyof DialogInputData<T>)[]): DialogContentBox
-}
+// type DialogContentBoxConstructor<T extends ArticleType> = {
+//     new(component: DialogComponent<T>, type: ArticleType, ...label: (keyof DialogInputData<T>)[]): DialogContentBox
+// }
  
-export class BasicDialogContentBox<T extends ArticleType> extends BaseComponent<'div'> implements DialogContentBox{
+export class BasicDialogComponent<T extends ArticleType> extends DialogComponent<T> {
 
-    constructor(component: DialogComponent<T>, type: ArticleType, ...label:(keyof DialogInputData<T>)[]) {
-        super('div');
-        this.addChild(new DialogContentHeader(type, component));
-        this.addChild(new DialogContentInput(type, component, ...label))
-        this.addChild(new DialogContentFooter(component))
+    
+    private static _bdcClassList: string[] = ["modal-dialog", "modal-dialog-centered"]
+
+    constructor(type: ArticleType, ...label:(keyof DialogInputData<T>)[]) {
+        super(type);
+        this.setClass(...BasicDialogComponent._bdcClassList)
+        this.addChild(new DialogContentHeader(type, this));
+        this.addChild(new DialogContentInput(type, this, ...label))
+        this.addChild(new DialogContentFooter(this))
     }
 }

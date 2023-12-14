@@ -12,6 +12,14 @@
     opacity: 0.7;
 }
 
+.shadow-hover {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.shadow-hover:hover {
+    box-shadow: var(--bs-box-shadow-lg) !important;
+}
+
 .mute * {
     pointer-events: none;
 }
