@@ -1,19 +1,28 @@
 import { BaseComponent, ComposableComponent } from "../base.js";
+import {ArticleType, ARTICLE_DATA_FIELD} from '../meta.js'
 
-export type ArticleType = "image" | "video" | "todo" | "task"
+type DialogInputData<T extends ArticleType> = {
+    [k in ARTICLE_DATA_FIELD[T]]: string
+} 
 
-export type DialogInputData = {
-    [k in string]: string
-}
+type DialogMetaData<T extends ArticleType> =  {
+    type: T
+} 
+
+//distributive conditional types
+export type DialogData<T> = T extends ArticleType ? Partial<DialogInputData<T> & DialogMetaData<T>> : never
+
 
 interface DialogComponentInterface {
     closeDialog(): void;
     submitData(): void;
+    get data(): Partial<DialogData<ArticleType>>
 }
 
 type DialogEventListener = ()=>void
 
-export class DialogComponent extends BaseComponent<'dialog'> implements DialogComponentInterface{
+
+export class DialogComponent<T extends ArticleType> extends BaseComponent<'dialog'> implements DialogComponentInterface {
 
     private _submitEvent?: DialogEventListener;
 
@@ -21,10 +30,12 @@ export class DialogComponent extends BaseComponent<'dialog'> implements DialogCo
         this._submitEvent = l;
     }
 
-    private _data: DialogInputData = {}
+    private _data: DialogData<ArticleType> = {}
 
-    get data() {return this._data}
-    set data(data: DialogInputData) {this._data = data}
+    get data() {
+        return this._data
+    }
+    set data(data: DialogData<ArticleType>) {this._data = data}
 
     private _backgroundStyle: string = `
         position: fixed;
@@ -40,11 +51,10 @@ export class DialogComponent extends BaseComponent<'dialog'> implements DialogCo
     `
 
 
-    constructor(private contentBox: DialogContentBoxConstructor, public type: ArticleType, ...label: string[]) {
+    constructor(private contentBox: DialogContentBoxConstructor<T>, public type: ArticleType, ...label: (keyof DialogInputData<T>)[]) {
         super('dialog');
         this.setStyle(this._backgroundStyle);
         const box = new this.contentBox(this, type, ...label);
-        
         this.addChild(box)
 
     }
@@ -61,7 +71,13 @@ export class DialogComponent extends BaseComponent<'dialog'> implements DialogCo
     }
 }
 
-class DialogContentHeader extends BaseComponent<'header'> {
+export type DialogComponentT<T> = T extends ArticleType ? DialogComponent<T>:never;
+
+
+
+
+//components in dialog//
+class DialogContentHeader<T extends ArticleType> extends BaseComponent<'header'> {
     private _headerStyle: string = `
         display: block;
         text-align: center;
@@ -83,7 +99,7 @@ class DialogContentHeader extends BaseComponent<'header'> {
         
     `
 
-    constructor(type: ArticleType, private dialogComponent: DialogComponent) {
+    constructor(type: ArticleType, private dialogComponent: DialogComponent<T>) {
         super('header');
         this._component.textContent = "New " + type ;
         this.setStyle(this._headerStyle)
@@ -103,10 +119,10 @@ class DialogContentHeader extends BaseComponent<'header'> {
     }
 }
 
-class DialogContentFooter extends BaseComponent<'footer'>{
+class DialogContentFooter<T extends ArticleType> extends BaseComponent<'footer'>{
     private _footerStyle: string = ``
 
-    constructor(component: DialogComponent) {
+    constructor(component: DialogComponent<T>) {
         super('footer');
         this.setStyle(this._footerStyle)
         const button = document.createElement('button');
@@ -117,7 +133,7 @@ class DialogContentFooter extends BaseComponent<'footer'>{
     }
 }
 
-class DialogContentInput extends BaseComponent<'section'> {
+class DialogContentInput<T extends ArticleType> extends BaseComponent<'section'> {
 
     private _labelStyle: string = ``
     private _inputStyle: string = `
@@ -127,7 +143,7 @@ class DialogContentInput extends BaseComponent<'section'> {
         justify-content: space-between;
     `
 
-    constructor(private dialog: DialogComponent, ...label: string[]) {
+    constructor(private type: ArticleType, private dialog: DialogComponent<T>, ...label: (keyof DialogInputData<T>)[]) {
         super('section');
         label.forEach(label=>{
             const line = document.createElement('div');
@@ -138,7 +154,7 @@ class DialogContentInput extends BaseComponent<'section'> {
         })
     }
 
-    private makeLabel(l: string) {
+    private makeLabel(l: keyof DialogInputData<T>) {
         const label = document.createElement('label');
         label.setAttribute('for', l + '_input');
         label.setAttribute('style', this._labelStyle)
@@ -146,13 +162,16 @@ class DialogContentInput extends BaseComponent<'section'> {
         return label;
     }
 
-    private makeInput(l: string) {
+    private makeInput(l: keyof DialogInputData<T>) {
         const input = document.createElement('input')
         input.setAttribute('style', this._inputStyle)
         input.setAttribute('id', l+'_input');
-        input.addEventListener('change', (e: Event)=>{
+        input.addEventListener('input', (e: Event)=>{
             const currentTarget = e.currentTarget as HTMLInputElement;
-            this.dialog.data = {...this.dialog.data, [l]: currentTarget.value}
+            
+
+            this.dialog.data = {...this.dialog.data, [l]: currentTarget.value, type: this.type}
+            
         })
         return input
     }
@@ -162,16 +181,16 @@ interface DialogContentBox extends ComposableComponent{
 
 }
 
-type DialogContentBoxConstructor = {
-    new(component: DialogComponent, type: ArticleType, ...label: string[]): DialogContentBox
+type DialogContentBoxConstructor<T extends ArticleType> = {
+    new(component: DialogComponent<T>, type: ArticleType, ...label: (keyof DialogInputData<T>)[]): DialogContentBox
 }
  
-export class BasicDialogContentBox extends BaseComponent<'div'> implements DialogContentBox{
+export class BasicDialogContentBox<T extends ArticleType> extends BaseComponent<'div'> implements DialogContentBox{
 
-    constructor(component: DialogComponent, type: ArticleType, ...label: string[]) {
+    constructor(component: DialogComponent<T>, type: ArticleType, ...label:(keyof DialogInputData<T>)[]) {
         super('div');
         this.addChild(new DialogContentHeader(type, component));
-        this.addChild(new DialogContentInput(component, ...label))
+        this.addChild(new DialogContentInput(type, component, ...label))
         this.addChild(new DialogContentFooter(component))
     }
 }

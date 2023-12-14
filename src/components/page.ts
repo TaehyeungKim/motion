@@ -1,18 +1,17 @@
-import { ArticleListComponent, BaseComponent, Component, ComposableComponent } from "./base.js";
-import { DialogComponent } from "./dialog/dialog.js";
-import { ArticleComponent } from "./base.js";
+import { BaseComponent, ComposableComponent } from "./base.js";
+import { ArticleListComponent } from "./items/item-base.js";
+import { DialogData } from "./dialog/dialog.js";
 import { ImageArticleComponent } from "./items/image.js";
 import { VideoArticleComponent } from "./items/video.js";
 import { NoteArticleComponent } from "./items/note.js";
 import { TodoArticleComponent } from "./items/todo.js";
-
+import { ArticleType } from "./meta.js";
 
 
 export type DragState = "start" | "end" | "enter" | "leave"
 export type DragListener = (state: DragState, target: ArticleListComponent) => void;
-
 export interface PageComponentInterface extends ComposableComponent{
-    addArticle(dialog: DialogComponent): void
+    addArticle(data: DialogData<ArticleType>): void
 }
 
 export class PageComponent extends BaseComponent<'section'> implements PageComponentInterface{
@@ -28,12 +27,11 @@ export class PageComponent extends BaseComponent<'section'> implements PageCompo
     }
 
     onDrop() {
-        console.log(this._dragTarget, this._dropTarget)
         if(!this._dragTarget || !this._dropTarget) return ;
         if(this._dragTarget !== this._dropTarget) {
-            this._dragTarget.switchPosition(this._dropTarget, "beforebegin")    
-            
-            
+            const p = this._dragTarget.component.compareDocumentPosition(this._dropTarget.component)
+            if(p === 2) this._dragTarget.switchPosition(this._dropTarget, "beforebegin")
+            else if(p === 4) this._dragTarget.switchPosition(this._dropTarget, "afterend")    
         }
     }
 
@@ -60,25 +58,29 @@ export class PageComponent extends BaseComponent<'section'> implements PageCompo
         }
     }
 
-    
 
-    addArticle(dialog: DialogComponent) {
+    addArticle(data: DialogData<ArticleType>) {
+
         let newArticle: ArticleListComponent;
+
         
-        switch(dialog.type) {
+        switch(data.type) {
             case "image":
-                newArticle = new ArticleListComponent(ImageArticleComponent, dialog.data.url, dialog.data.title)
+                newArticle = new ArticleListComponent(ImageArticleComponent, data.url as string, data.title as string)
                 break;
             case "video":
-                newArticle = new ArticleListComponent(VideoArticleComponent, dialog.data.url, dialog.data.title)
+                newArticle = new ArticleListComponent(VideoArticleComponent, data.url as string, data.title as string)
                 break;
             case "task":
-                newArticle = new ArticleListComponent(NoteArticleComponent, dialog.data.title, dialog.data.note);
+                newArticle = new ArticleListComponent(NoteArticleComponent, data.title as string, data.note as string);
                 break;
             case "todo":
-                const bodyKeys = Object.keys(dialog.data).filter(key=>key !== "title")
-                newArticle = new ArticleListComponent(TodoArticleComponent, dialog.data.title,  ...bodyKeys)
+                const bodyKeys = Object.keys(data).filter(key => key !== "title" && key !== "type") as [keyof Omit<DialogData<"todo">, "type"|"title">]
+                const bodyData = bodyKeys.map(key=>data[key]).filter(data=>data !== undefined) as string[]
+                newArticle = new ArticleListComponent(TodoArticleComponent, data.title as string,  ...bodyData)
                 break;
+            default:
+                throw new Error("undefined data is set")
         }
         this._articles.add(newArticle)
         newArticle.attachTo(this._component)

@@ -1,4 +1,5 @@
-import { BaseComponent, ArticleComponent, ArticleListConstructor } from "../base.js";
+import { BaseComponent } from "../base.js";
+import {ArticleComponent} from './item-base.js'
 
 
 

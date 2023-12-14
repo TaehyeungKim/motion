@@ -3,7 +3,9 @@ export class DialogComponent extends BaseComponent {
     set submitEvent(l) {
         this._submitEvent = l;
     }
-    get data() { return this._data; }
+    get data() {
+        return this._data;
+    }
     set data(data) { this._data = data; }
     constructor(contentBox, type, ...label) {
         super('dialog');
@@ -85,8 +87,9 @@ class DialogContentFooter extends BaseComponent {
     }
 }
 class DialogContentInput extends BaseComponent {
-    constructor(dialog, ...label) {
+    constructor(type, dialog, ...label) {
         super('section');
+        this.type = type;
         this.dialog = dialog;
         this._labelStyle = ``;
         this._inputStyle = `
@@ -114,9 +117,9 @@ class DialogContentInput extends BaseComponent {
         const input = document.createElement('input');
         input.setAttribute('style', this._inputStyle);
         input.setAttribute('id', l + '_input');
-        input.addEventListener('change', (e) => {
+        input.addEventListener('input', (e) => {
             const currentTarget = e.currentTarget;
-            this.dialog.data = Object.assign(Object.assign({}, this.dialog.data), { [l]: currentTarget.value });
+            this.dialog.data = Object.assign(Object.assign({}, this.dialog.data), { [l]: currentTarget.value, type: this.type });
         });
         return input;
     }
@@ -125,7 +128,7 @@ export class BasicDialogContentBox extends BaseComponent {
     constructor(component, type, ...label) {
         super('div');
         this.addChild(new DialogContentHeader(type, component));
-        this.addChild(new DialogContentInput(component, ...label));
+        this.addChild(new DialogContentInput(type, component, ...label));
         this.addChild(new DialogContentFooter(component));
     }
 }

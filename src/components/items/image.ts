@@ -1,4 +1,5 @@
-import {  BaseComponent,  ArticleComponent } from "../base.js";
+import {  BaseComponent } from "../base.js";
+import {ArticleComponent} from './item-base.js'
 
 
 
@@ -9,6 +10,7 @@ class ImageComponent extends BaseComponent<'img'>{
         super('img')
         this._component.src = url;
         this.setClass(ImageComponent._imageClass)
+        
     }
 }
 

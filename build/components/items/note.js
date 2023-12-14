@@ -1,4 +1,5 @@
-import { BaseComponent, ArticleComponent } from "../base.js";
+import { BaseComponent } from "../base.js";
+import { ArticleComponent } from './item-base.js';
 class NoteHeaderComponent extends BaseComponent {
     constructor(title) {
         super('header');

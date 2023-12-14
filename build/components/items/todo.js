@@ -1,4 +1,5 @@
-import { ArticleComponent, BaseComponent } from "../base.js";
+import { BaseComponent } from "../base.js";
+import { ArticleComponent } from './item-base.js';
 class TodoHeaderComponent extends BaseComponent {
     constructor(title) {
         super('header');

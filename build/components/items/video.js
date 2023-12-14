@@ -1,4 +1,5 @@
-import { ArticleComponent, BaseComponent } from "../base.js";
+import { BaseComponent } from "../base.js";
+import { ArticleComponent } from './item-base.js';
 class VideoFrameComponent extends BaseComponent {
     constructor(src) {
         super('iframe');
