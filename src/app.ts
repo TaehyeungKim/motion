@@ -48,7 +48,7 @@ class App {
             const backdrop = document.getElementById('staticBackdrop') as HTMLDivElement
             dialog.attachTo(backdrop)
             backdrop.setAttribute('style', "display: block")
-            backdrop.classList.add('show')
+            backdrop.classList.add('show');;
         }))
 
 
